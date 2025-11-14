@@ -1,0 +1,5 @@
+{
+  "name": "Algo-Arena: Sorting Showdown",
+  "description": "A web application for visualizing and comparing sorting algorithms. Users can pit built-in algorithms against each other or write their own in a sandboxed environment to evaluate its performance.",
+  "requestFramePermissions": []
+}

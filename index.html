@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo-Arena: The Sorting Showdown</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+      :root {
+        --glow-cyan: #00ffff;
+        --glow-fuchsia: #ff00ff;
+        --glow-yellow: #ffff00;
+        --glow-green: #00ff00;
+      }
+
+      body {
+        font-family: 'Roboto Mono', monospace;
+        background-color: #0d0d2b; /* Darker space blue */
+        background-image: 
+          linear-gradient(rgba(13, 71, 161, 0.3) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(13, 71, 161, 0.3) 1px, transparent 1px);
+        background-size: 50px 50px;
+        color: #e0e0e0;
+        overflow-x: hidden;
+      }
+      .font-game {
+        font-family: 'Press Start 2P', cursive;
+      }
+      .neon-text {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--glow-cyan), 0 0 20px var(--glow-cyan), 0 0 25px var(--glow-cyan), 0 0 30px var(--glow-cyan), 0 0 35px var(--glow-cyan);
+      }
+       /* Custom scrollbar for commentary and code editor */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: var(--glow-fuchsia);
+        border-radius: 10px;
+        box-shadow: 0 0 5px var(--glow-fuchsia);
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #fff;
+      }
+
+      /* Enhanced Slider Styles */
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 6px;
+        background: rgba(0,0,0,0.5);
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid var(--glow-fuchsia);
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: var(--glow-fuchsia);
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--glow-fuchsia), 0 0 15px var(--glow-fuchsia);
+        border: 2px solid #0d0d2b;
+        transition: background .2s ease-in-out;
+      }
+      input[type="range"]:disabled::-webkit-slider-thumb {
+        background: #555;
+        box-shadow: none;
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: var(--glow-fuchsia);
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--glow-fuchsia), 0 0 15px var(--glow-fuchsia);
+        border: 2px solid #0d0d2b;
+      }
+      input[type="range"]:disabled::-moz-range-thumb {
+        background: #555;
+        box-shadow: none;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      /* For Syntax Highlighting Editor */
+      .editor-container {
+          position: relative;
+          height: 100%;
+          width: 100%;
+          font-family: 'Roboto Mono', monospace;
+          font-size: 0.875rem; /* text-sm */
+          line-height: 1.25rem; /* text-sm */
+      }
+      .editor-container:focus-within {
+          /* Replicate tailwind's focus:ring-2 focus:ring-cyan-400 */
+          box-shadow: 0 0 0 2px #22d3ee;
+      }
+      .editor-container textarea,
+      .editor-container pre {
+          margin: 0;
+          padding: 1rem; /* p-4 */
+          border: none;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          box-sizing: border-box;
+      }
+      .editor-container textarea {
+          z-index: 1;
+          color: transparent;
+          background: transparent;
+          caret-color: white; /* Make caret visible */
+          resize: none;
+          outline: none;
+      }
+      .editor-container pre {
+          z-index: 0;
+          pointer-events: none; /* Let clicks pass through to textarea */
+      }
+      /* Override PrismJS default background */
+      pre[class*="language-"] {
+          background: transparent !important;
+          color: #e0e0e0 !important;
+      }
+      pre[class*="language-"] > code[class*="language-"] {
+          padding: 0;
+          margin: 0;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "chart.js/": "https://aistudiocdn.com/chart.js@^4.5.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^0.14.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
